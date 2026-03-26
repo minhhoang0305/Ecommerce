@@ -8,9 +8,23 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("Default") 
+    ?? Environment.GetEnvironmentVariable("DB_CONNECTION");
+
+if (string.IsNullOrEmpty(connectionString))
+    throw new Exception("DB_CONNECTION is missing");
+    
+var jwtKey = builder.Configuration["Jwt:Key"] 
+          ?? Environment.GetEnvironmentVariable("JWT_KEY");
+
+if (string.IsNullOrEmpty(jwtKey))
+    throw new Exception("JWT_KEY is missing");
+
+builder.Configuration.AddEnvironmentVariables();
+
 // DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+    options.UseSqlServer(connectionString));
 
 // MediatR
 builder.Services.AddMediatR(cfg =>
@@ -25,6 +39,7 @@ builder.Services.AddScoped<ICartRepository, CartRepository>();
 // FluentValidation
 builder.Services.AddValidatorsFromAssembly(typeof(RegisterValidator).Assembly);
 
+
 // Authentication
 builder.Services.AddAuthentication(options =>
 {
@@ -33,7 +48,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!);
+    var key = Encoding.UTF8.GetBytes(jwtKey);
 
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -54,7 +69,6 @@ builder.Services.AddAuthorization(option =>
     option.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
     option.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
 });
-builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

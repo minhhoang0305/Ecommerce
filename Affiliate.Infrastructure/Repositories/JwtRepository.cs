@@ -14,19 +14,29 @@ public class JwtRepository : IJwtRepository
     }
     public string GenerateToken(string email, string role)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+        var jwtKey = _configuration["Jwt:Key"] 
+                ?? Environment.GetEnvironmentVariable("JWT_KEY");
+
+        if (string.IsNullOrEmpty(jwtKey))
+            throw new Exception("JWT Key is missing");
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
         var claims = new[]
         {
             new Claim(ClaimTypes.Role, role),
             new Claim(ClaimTypes.Email, email)
         };
+
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddHours(1),
+            expires: DateTime.UtcNow.AddHours(1), // 🔥 dùng UTC
             signingCredentials: creds);
+
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
