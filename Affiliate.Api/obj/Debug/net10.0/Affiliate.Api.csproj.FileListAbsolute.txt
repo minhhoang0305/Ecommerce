@@ -173,3 +173,4 @@ D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\refint\Affiliate.Api.dll
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.pdb
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.genruntimeconfig.cache
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\ref\Affiliate.Api.dll
+D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.sourcelink.json

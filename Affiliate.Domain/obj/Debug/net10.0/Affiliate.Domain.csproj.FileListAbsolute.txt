@@ -9,3 +9,4 @@ D:\.Net\Affiliate\Affiliate.Domain\obj\Debug\net10.0\Affiliate.Domain.dll
 D:\.Net\Affiliate\Affiliate.Domain\obj\Debug\net10.0\refint\Affiliate.Domain.dll
 D:\.Net\Affiliate\Affiliate.Domain\obj\Debug\net10.0\Affiliate.Domain.pdb
 D:\.Net\Affiliate\Affiliate.Domain\obj\Debug\net10.0\ref\Affiliate.Domain.dll
+D:\.Net\Affiliate\Affiliate.Domain\obj\Debug\net10.0\Affiliate.Domain.sourcelink.json

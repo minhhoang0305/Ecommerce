@@ -13,3 +13,4 @@ D:\.Net\Affiliate\Affiliate.Application\obj\Debug\net10.0\Affiliate.Application.
 D:\.Net\Affiliate\Affiliate.Application\obj\Debug\net10.0\refint\Affiliate.Application.dll
 D:\.Net\Affiliate\Affiliate.Application\obj\Debug\net10.0\Affiliate.Application.pdb
 D:\.Net\Affiliate\Affiliate.Application\obj\Debug\net10.0\ref\Affiliate.Application.dll
+D:\.Net\Affiliate\Affiliate.Application\obj\Debug\net10.0\Affiliate.Application.sourcelink.json

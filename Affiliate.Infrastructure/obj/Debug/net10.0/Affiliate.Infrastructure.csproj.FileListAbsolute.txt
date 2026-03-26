@@ -17,3 +17,4 @@ D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\refint\Affiliate.In
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.pdb
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.genruntimeconfig.cache
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\ref\Affiliate.Infrastructure.dll
+D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.sourcelink.json

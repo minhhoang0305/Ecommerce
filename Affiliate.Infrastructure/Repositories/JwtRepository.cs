@@ -25,7 +25,7 @@ public class JwtRepository : IJwtRepository
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddSeconds(30),
+            expires: DateTime.Now.AddHours(1),
             signingCredentials: creds);
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
