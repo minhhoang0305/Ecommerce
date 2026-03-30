@@ -19,6 +19,9 @@ public class GetUserOrdersHandler : IRequestHandler<GetUserOrdersQuery, IReadOnl
                 order.Id,
                 order.Items.Select(item => new OrderItemDTO(item.ProductName, item.Price, item.Quantity)).ToList(),
                 order.TotalAmount,
+                order.Discount,
+                order.FinalAmount,
+                order.Coupon?.Code,
                 order.IsPaid,
                 order.CreatedAt))
             .ToList();

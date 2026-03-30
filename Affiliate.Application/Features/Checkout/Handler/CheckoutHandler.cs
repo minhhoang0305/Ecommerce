@@ -12,12 +12,19 @@ public class CheckoutHandler : IRequestHandler<CheckoutCommand, OrderDTO>
 
     public async Task<OrderDTO> Handle(CheckoutCommand request, CancellationToken cancellationToken)
     {
-        var order = await _orderRepository.CheckoutAsync(request.UserId, request.PaymentMethod, cancellationToken);
+        var order = await _orderRepository.CheckoutAsync(
+            request.UserId,
+            request.PaymentMethod,
+            request.CouponCode,
+            cancellationToken);
 
         return new OrderDTO(
             order.Id,
             order.Items.Select(x => new OrderItemDTO(x.ProductName, x.Price, x.Quantity)).ToList(),
             order.TotalAmount,
+            order.Discount,
+            order.FinalAmount,
+            order.Coupon?.Code,
             order.IsPaid,
             order.CreatedAt);
     }

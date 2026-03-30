@@ -97,6 +97,49 @@ namespace Affiliate.Infrastructure.Migrations
                     b.ToTable("CartItems");
                 });
 
+            modelBuilder.Entity("Coupon", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("DiscountPercent")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TimesUsed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("UsageLimit")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Coupon", (string)null);
+                });
+
             modelBuilder.Entity("OrderItems", b =>
                 {
                     b.Property<Guid>("Id")
@@ -129,8 +172,14 @@ namespace Affiliate.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CouponId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
@@ -139,6 +188,8 @@ namespace Affiliate.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CouponId");
 
                     b.ToTable("Orders");
                 });
@@ -209,6 +260,15 @@ namespace Affiliate.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Orders", b =>
+                {
+                    b.HasOne("Coupon", "Coupon")
+                        .WithMany()
+                        .HasForeignKey("CouponId");
+
+                    b.Navigation("Coupon");
                 });
 
             modelBuilder.Entity("Cart", b =>

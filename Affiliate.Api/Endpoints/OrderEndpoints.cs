@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Affiliate.Application.DTOs;
+using Affiliate.Domain.Entities;
 using MediatR;
 
 public static class OrderEndpoint
@@ -15,7 +16,7 @@ public static class OrderEndpoint
 
             var orders = await mediator.Send(new GetUserOrdersQuery(userId));
             return Results.Ok(orders);
-        }).RequireAuthorization();
+        }).RequireAuthorization("UserOnly");
 
         app.MapPost("api/v1/orders/checkout", async (
             CheckoutRequest request,
@@ -25,9 +26,9 @@ public static class OrderEndpoint
             if (!TryGetUserId(user, out var userId))
                 return Results.Unauthorized();
 
-            var order = await mediator.Send(new CheckoutCommand(userId, request.PaymentMethod));
+            var order = await mediator.Send(new CheckoutCommand(userId, request.PaymentMethod, request.CouponCode));
             return Results.Ok(order);
-        }).RequireAuthorization();
+        }).RequireAuthorization("UserOnly");
     }
 
     private static bool TryGetUserId(ClaimsPrincipal user, out Guid userId)

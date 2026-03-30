@@ -9,6 +9,7 @@ public class AppDbContext : DbContext
     public DbSet<CartItem> CartItems => Set<CartItem>();
     public DbSet<Orders> Orders => Set<Orders>();
     public DbSet<OrderItems> OrderItems => Set<OrderItems>();
+    public DbSet<Coupon> Coupon => Set<Coupon>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)

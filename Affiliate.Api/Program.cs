@@ -36,6 +36,7 @@ builder.Services.AddScoped<IJwtRepository,  JwtRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ICouponRepository, CouponRepository>();
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssembly(typeof(RegisterValidator).Assembly);
@@ -130,5 +131,6 @@ app.MapAuthEndpoints();
 app.MapProductEndpoints();
 app.MapCartEndpoints();
 app.MapOrderEndpoints();
+app.MapCouponEndpoints();
 
 app.Run();

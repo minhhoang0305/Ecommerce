@@ -13,7 +13,7 @@ public static class CartEndpoints
 
             var cart = await mediator.Send(new CartCommand(userId));
             return cart is null ? Results.NotFound() : Results.Ok(cart);
-        }).RequireAuthorization();
+        }).RequireAuthorization("UserOnly");
 
         app.MapPut("api/v1/cart/items/{id:guid}", async (
             Guid id,
@@ -26,7 +26,7 @@ public static class CartEndpoints
 
             await mediator.Send(new UpdateCartItemCommand(id, request.Quantity, userId));
             return Results.Ok(new { message = "Cart item updated successfully" });
-        }).RequireAuthorization();
+        }).RequireAuthorization("UserOnly");
 
         app.MapPost("api/v1/cart/add", async (
             CartAddItemRequest request,
@@ -38,7 +38,7 @@ public static class CartEndpoints
 
             await mediator.Send(new AddToCartCommand(request.ProductId, request.Quantity, userId));
             return Results.Ok(new { message = "Item added to cart successfully" });
-        }).RequireAuthorization();
+        }).RequireAuthorization("UserOnly");
     }
 
     private static bool TryGetUserId(ClaimsPrincipal user, out Guid userId)

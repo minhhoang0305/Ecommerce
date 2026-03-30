@@ -4,7 +4,7 @@ public interface IOrderRepository
 {
     Task<Orders?> GetByIdAsync(Guid id);
     Task<IReadOnlyList<Orders>> GetByUserIdAsync(Guid userId);
-    Task<Orders> CheckoutAsync(Guid userId, string paymentMethod, CancellationToken cancellationToken);
+    Task<Orders> CheckoutAsync(Guid userId, string paymentMethod, string? couponCode, CancellationToken cancellationToken);
     Task UpdateAsync(Orders order);
     Task SaveAsync(Orders order);
 }

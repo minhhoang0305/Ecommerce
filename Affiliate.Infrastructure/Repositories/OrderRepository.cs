@@ -20,6 +20,7 @@ public class OrderRepository : IOrderRepository
     {
         return await _context.Orders
             .Include(x => x.Items)
+            .Include(x => x.Coupon)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
@@ -27,12 +28,13 @@ public class OrderRepository : IOrderRepository
     {
         return await _context.Orders
             .Include(x => x.Items)
+            .Include(x => x.Coupon)
             .Where(x => x.UserId == userId)
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
     }
 
-    public async Task<Orders> CheckoutAsync(Guid userId, string paymentMethod, CancellationToken cancellationToken)
+    public async Task<Orders> CheckoutAsync(Guid userId, string paymentMethod, string? couponCode, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(paymentMethod))
             throw new Exception("Payment method is required");
@@ -65,6 +67,19 @@ public class OrderRepository : IOrderRepository
 
             product.Stock -= cartItem.Quantity;
             order.AddItem(product.Name, product.Price, cartItem.Quantity);
+        }
+
+        if (!string.IsNullOrWhiteSpace(couponCode))
+        {
+            var coupon = await _context.Coupon.FirstOrDefaultAsync(
+                x => x.Code == couponCode.Trim(),
+                cancellationToken);
+
+            if (coupon == null)
+                throw new Exception("Coupon not found");
+
+            order.ApplyCoupon(coupon);
+            coupon.TimesUsed++;
         }
 
         order.MarkAsPaid();
