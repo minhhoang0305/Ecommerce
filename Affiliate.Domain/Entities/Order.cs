@@ -2,6 +2,10 @@ using System.Data.Common;
 
 public class Orders
 {
+    public const string StatusCreated = "CREATED";
+    public const string StatusPaid = "PAID";
+    public const string StatusCompleted = "COMPLETED";
+
     public Guid Id { get; private set; } = Guid.NewGuid();
     public Guid UserId { get; set; }
     public List<OrderItems> Items { get; private set; } = new();
@@ -10,17 +14,21 @@ public class Orders
     public decimal FinalAmount => TotalAmount - Discount;
     public bool IsPaid { get; private set; }
     public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    public string Status { get; private set; } = StatusCreated;
+    public DateTime? CompletedAt { get; private set; }
+    public int LoyaltyPointsAwarded { get; private set; }
+    public decimal RankDiscount { get; private set; }
 
     public Guid? CouponId {get; private set;}
     public Coupon? Coupon {get; private set;}
 
 
-    public void AddItem(string productName, decimal price, int quantity)
+    public void AddItem(Guid ProductId, string productName, decimal price, int quantity)
     {
         if (quantity <= 0)
             throw new ArgumentException("Quantity must be greater than 0", nameof(quantity));
 
-        Items.Add(new OrderItems(productName, price, quantity));
+        Items.Add(new OrderItems(ProductId, productName, price, quantity));
     }
 
     public void ApplyCoupon(Coupon coupon)
@@ -40,5 +48,38 @@ public class Orders
     public void MarkAsPaid()
     {
         IsPaid = true;
+        if (!string.Equals(Status, StatusCompleted, StringComparison.OrdinalIgnoreCase))
+            Status = StatusPaid;
+    }
+
+    // Replaces any existing rank discount to keep this operation idempotent.
+    public void SetRankDiscountPercent(decimal percent)
+    {
+        if (percent < 0 || percent > 100)
+            throw new ArgumentOutOfRangeException(nameof(percent), "Rank discount percent must be between 0 and 100.");
+
+        var newRankDiscount = Math.Round(TotalAmount * (percent / 100), 2, MidpointRounding.AwayFromZero);
+        var newTotalDiscount = (Discount - RankDiscount) + newRankDiscount;
+
+        if (newTotalDiscount < 0)
+            newTotalDiscount = 0;
+        if (newTotalDiscount > TotalAmount)
+            newTotalDiscount = TotalAmount;
+
+        RankDiscount = newRankDiscount;
+        Discount = Math.Round(newTotalDiscount, 2, MidpointRounding.AwayFromZero);
+    }
+
+    public void MarkAsCompleted(int pointsAwarded)
+    {
+        if (!IsPaid)
+            throw new InvalidOperationException("Only paid orders can be completed.");
+
+        if (string.Equals(Status, StatusCompleted, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        Status = StatusCompleted;
+        CompletedAt = DateTime.UtcNow;
+        LoyaltyPointsAwarded = Math.Max(0, pointsAwarded);
     }
 }

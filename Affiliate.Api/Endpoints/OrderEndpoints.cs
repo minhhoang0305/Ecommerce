@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Affiliate.Application.DTOs;
+using Affiliate.Application.Features.Checkout.Command;
 using Affiliate.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +32,15 @@ public static class OrderEndpoint
             var order = await mediator.Send(new CheckoutCommand(userId, request.PaymentMethod, request.CouponCode));
             return Results.Ok(order);
         }).RequireAuthorization("UserOnly");
+
+        // Admin marks an order as COMPLETED -> awards loyalty points to the user.
+        app.MapPost("api/v1/orders/{id:guid}/complete", async (
+            Guid id,
+            IMediator mediator) =>
+        {
+            var result = await mediator.Send(new CompleteOrderCommand(id));
+            return Results.Ok(result);
+        }).RequireAuthorization("AdminOnly");
 
         app.MapPost("api/v1/payments/vnpay/create", async (
             CheckoutRequest request,

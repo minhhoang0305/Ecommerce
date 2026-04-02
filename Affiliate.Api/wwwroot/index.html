@@ -195,12 +195,89 @@
                 <span class="product-stock"></span>
             </div>
             <div class="product-actions">
+                <button class="ghost-button compact-button view-detail-button" type="button">Chi tiet</button>
                 <label class="quantity-picker">
                     <span>SL</span>
                     <input class="quantity-input" type="number" min="1" value="1">
                 </label>
                 <button class="primary-button compact-button add-cart-button" type="button">Them vao gio</button>
             </div>
+        </article>
+    </template>
+
+    <div id="productModal" class="modal hidden" aria-hidden="true">
+        <div class="modal-backdrop" data-modal-close="true"></div>
+        <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Chi tiet san pham">
+            <div class="modal-header">
+                <div>
+                    <p id="modalCategory" class="section-kicker">San pham</p>
+                    <h2 id="modalTitle">Chi tiet san pham</h2>
+                </div>
+                <button id="closeModalButton" class="ghost-button compact-button" type="button">Dong</button>
+            </div>
+
+            <div class="modal-body">
+                <section class="modal-product">
+                    <p id="modalDescription" class="modal-description"></p>
+                    <div class="modal-meta">
+                        <strong id="modalPrice" class="modal-price"></strong>
+                        <span id="modalStock" class="modal-stock"></span>
+                    </div>
+
+                    <div class="rating-summary">
+                        <div class="rating-score">
+                            <strong id="modalAverageNumber">0.0</strong>
+                            <span class="muted-text">/ 5</span>
+                        </div>
+                        <div>
+                            <div id="modalStars" class="stars" aria-label="Danh gia"></div>
+                            <p id="modalRatingLabel" class="muted-text">0 danh gia</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="modal-reviews">
+                    <div class="section-heading compact">
+                        <div>
+                            <p class="section-kicker">Review</p>
+                            <h2>Danh gia</h2>
+                        </div>
+                        <button id="refreshReviewsButton" class="ghost-button compact-button" type="button">Tai lai</button>
+                    </div>
+
+                    <form id="reviewForm" class="stack-form review-form">
+                        <label>
+                            <span>So sao</span>
+                            <div id="ratingPicker" class="star-picker" role="radiogroup" aria-label="Chon so sao"></div>
+                            <input type="hidden" name="rating" value="5">
+                        </label>
+                        <label>
+                            <span>Comment</span>
+                            <textarea name="comment" rows="4" placeholder="Chia se trai nghiem cua ban..." required></textarea>
+                        </label>
+                        <button class="primary-button" type="submit">Gui danh gia</button>
+                        <p id="reviewMessage" class="muted-text"></p>
+                    </form>
+
+                    <div id="reviewsList" class="reviews-list empty-state">Chua co danh gia nao.</div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <template id="reviewItemTemplate">
+        <article class="review-item">
+            <div class="review-item-header">
+                <div class="review-identity">
+                    <span class="review-avatar" aria-hidden="true"></span>
+                    <div>
+                        <strong class="review-user"></strong>
+                        <div class="stars small"></div>
+                    </div>
+                </div>
+                <span class="muted-text review-date"></span>
+            </div>
+            <p class="review-comment"></p>
         </article>
     </template>
 

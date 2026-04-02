@@ -27,6 +27,7 @@ public class ProductRepository : IProductRepository
         return await _context.Products.Where(p => !p.IsDeleted).ToListAsync();
     }
 
+
     public async Task<(IReadOnlyList<Products> Items, int TotalCount)> GetPagedAsync(
         int page,
         int size,

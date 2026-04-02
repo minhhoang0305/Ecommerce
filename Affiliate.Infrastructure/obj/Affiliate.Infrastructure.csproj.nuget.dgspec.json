@@ -65,6 +65,10 @@
             "MediatR": {
               "target": "Package",
               "version": "[14.1.0, )"
+            },
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[10.0.5, )"
             }
           },
           "imports": [
@@ -767,9 +771,9 @@
               "target": "Package",
               "version": "[10.0.5, )"
             },
-            "Pomelo.EntityFrameworkCore.MySql": {
+            "Microsoft.Extensions.Options": {
               "target": "Package",
-              "version": "[9.0.0, )"
+              "version": "[10.0.5, )"
             }
           },
           "imports": [

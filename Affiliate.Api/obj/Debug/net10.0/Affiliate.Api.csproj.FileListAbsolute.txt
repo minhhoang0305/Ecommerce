@@ -1,5 +1,6 @@
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\appsettings.Development.json
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\appsettings.json
+D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Affiliate.Api.staticwebassets.runtime.json
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Affiliate.Api.staticwebassets.endpoints.json
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Affiliate.Api.exe
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Affiliate.Api.deps.json
@@ -44,9 +45,7 @@ D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Microsoft.OpenApi.dll
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Microsoft.SqlServer.Server.dll
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Microsoft.VisualStudio.SolutionPersistence.dll
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Mono.TextTemplating.dll
-D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\MySqlConnector.dll
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Newtonsoft.Json.dll
-D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Pomelo.EntityFrameworkCore.MySql.dll
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -158,6 +157,7 @@ D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.AssemblyInfo.cs
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.csproj.CoreCompileInputs.cache
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.MvcApplicationPartsAssemblyInfo.cs
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.MvcApplicationPartsAssemblyInfo.cache
+D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.sourcelink.json
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\rjimswa.dswa.cache.json
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
@@ -173,8 +173,6 @@ D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\refint\Affiliate.Api.dll
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.pdb
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.genruntimeconfig.cache
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\ref\Affiliate.Api.dll
-D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.sourcelink.json
-D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Affiliate.Api.staticwebassets.runtime.json
-D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\compressed\w7tlg0q32k-{0}-1b0rmmgj0s-1b0rmmgj0s.gz
-D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\compressed\n4mntbqkcj-{0}-uig9pw5c09-uig9pw5c09.gz
-D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\compressed\6tyzkhhlc3-{0}-martd8eqd5-martd8eqd5.gz
+D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\compressed\n4mntbqkcj-{0}-qqwmz4hpww-qqwmz4hpww.gz
+D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\compressed\6tyzkhhlc3-{0}-vgdfd4a9p1-vgdfd4a9p1.gz
+D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\compressed\w7tlg0q32k-{0}-ljm4gfkijp-ljm4gfkijp.gz

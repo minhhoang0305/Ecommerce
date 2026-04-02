@@ -8,4 +8,6 @@ public record OrderDTO(
     decimal FinalAmount,
     string? CouponCode,
     bool IsPaid,
+    string Status,
+    int LoyaltyPointsAwarded,
     DateTime CreatedAt);

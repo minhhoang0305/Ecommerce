@@ -11,10 +11,10 @@ D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastru
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.AssemblyInfoInputs.cache
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.AssemblyInfo.cs
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.csproj.CoreCompileInputs.cache
+D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.sourcelink.json
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliat.627FD437.Up2Date
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.dll
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\refint\Affiliate.Infrastructure.dll
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.pdb
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.genruntimeconfig.cache
 D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\ref\Affiliate.Infrastructure.dll
-D:\.Net\Affiliate\Affiliate.Infrastructure\obj\Debug\net10.0\Affiliate.Infrastructure.sourcelink.json

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Affiliate.Application.Loyalty;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,9 +38,11 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICouponRepository, CouponRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.Configure<VnPayOptions>(builder.Configuration.GetSection(VnPayOptions.SectionName));
+builder.Services.Configure<LoyaltyOptions>(builder.Configuration.GetSection(LoyaltyOptions.SectionName));
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssembly(typeof(RegisterValidator).Assembly);
@@ -134,6 +137,7 @@ app.MapProductEndpoints();
 app.MapCartEndpoints();
 app.MapOrderEndpoints();
 app.MapCouponEndpoints();
+app.MapReviewEndpoints();
 app.MapFallbackToFile("index.html");
 
 app.Run();

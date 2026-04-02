@@ -7,7 +7,12 @@ const state = {
     token: localStorage.getItem("affiliate_token") || "",
     user: readStoredJson("affiliate_user"),
     cart: null,
-    orders: []
+    orders: [],
+    productModal: {
+        productId: "",
+        product: null,
+        reviews: null
+    }
 };
 
 const elements = {
@@ -30,6 +35,22 @@ const elements = {
     previousPageButton: document.getElementById("previousPageButton"),
     productGrid: document.getElementById("productGrid"),
     productCardTemplate: document.getElementById("productCardTemplate"),
+    productModal: document.getElementById("productModal"),
+    closeModalButton: document.getElementById("closeModalButton"),
+    modalCategory: document.getElementById("modalCategory"),
+    modalTitle: document.getElementById("modalTitle"),
+    modalDescription: document.getElementById("modalDescription"),
+    modalPrice: document.getElementById("modalPrice"),
+    modalStock: document.getElementById("modalStock"),
+    modalStars: document.getElementById("modalStars"),
+    modalAverageNumber: document.getElementById("modalAverageNumber"),
+    modalRatingLabel: document.getElementById("modalRatingLabel"),
+    ratingPicker: document.getElementById("ratingPicker"),
+    reviewForm: document.getElementById("reviewForm"),
+    reviewMessage: document.getElementById("reviewMessage"),
+    reviewsList: document.getElementById("reviewsList"),
+    reviewItemTemplate: document.getElementById("reviewItemTemplate"),
+    refreshReviewsButton: document.getElementById("refreshReviewsButton"),
     refreshProductsButton: document.getElementById("refreshProductsButton"),
     sessionDetail: document.getElementById("sessionDetail"),
     sessionState: document.getElementById("sessionState"),
@@ -73,6 +94,21 @@ function bindEvents() {
         state.page = 1;
         fetchProducts();
     });
+
+    elements.closeModalButton.addEventListener("click", closeProductModal);
+    elements.productModal.addEventListener("click", event => {
+        const target = event.target;
+        if (target?.dataset?.modalClose === "true") closeProductModal();
+    });
+    elements.refreshReviewsButton.addEventListener("click", () => {
+        if (state.productModal.productId) loadProductReviews(state.productModal.productId);
+    });
+    elements.reviewForm.addEventListener("submit", handleReviewSubmit);
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !elements.productModal.classList.contains("hidden")) closeProductModal();
+    });
+
+    setupRatingPicker(5);
 }
 
 async function fetchProducts() {
@@ -132,8 +168,11 @@ function renderProducts() {
         const quantityInput = node.querySelector(".quantity-input");
         quantityInput.max = String(Math.max(product.stock, 1));
 
+        const detailButton = node.querySelector(".view-detail-button");
+        detailButton.addEventListener("click", () => openProductModal(product.id));
+
         const addButton = node.querySelector(".add-cart-button");
-        addButton.disabled = !isActive || product.stock <= 0;
+        addButton.disabled = !state.token || !isActive || product.stock <= 0;
         addButton.textContent = !isActive ? "Tam an" : product.stock > 0 ? "Them vao gio" : "Het hang";
         if (!state.token && isActive && product.stock > 0) {
             addButton.title = "Dang nhap role User de them vao gio hang.";
@@ -440,6 +479,252 @@ function updatePagination(page, size, totalCount) {
     elements.nextPageButton.disabled = page >= lastPage;
 }
 
+async function openProductModal(productId) {
+    state.productModal.productId = String(productId || "");
+    state.productModal.product = null;
+    state.productModal.reviews = null;
+
+    elements.productModal.classList.remove("hidden");
+    elements.productModal.setAttribute("aria-hidden", "false");
+
+    elements.modalCategory.textContent = "San pham";
+    elements.modalTitle.textContent = "Dang tai...";
+    elements.modalDescription.textContent = "";
+    elements.modalPrice.textContent = "";
+    elements.modalStock.textContent = "";
+    elements.modalAverageNumber.textContent = "0.0";
+    renderStars(elements.modalStars, 0);
+    elements.modalRatingLabel.textContent = "0 danh gia";
+    elements.reviewsList.textContent = "Dang tai danh gia...";
+    setReviewMessage("");
+
+    try {
+        await Promise.all([loadProductDetail(productId), loadProductReviews(productId)]);
+    } catch (error) {
+        setReviewMessage(error.message);
+    }
+
+    syncReviewFormState();
+}
+
+function closeProductModal() {
+    elements.productModal.classList.add("hidden");
+    elements.productModal.setAttribute("aria-hidden", "true");
+    state.productModal.productId = "";
+    state.productModal.product = null;
+    state.productModal.reviews = null;
+    setReviewMessage("");
+}
+
+async function loadProductDetail(productId) {
+    const response = await fetch(`/api/v1/products/${productId}`);
+    if (!response.ok) throw new Error("Khong the tai chi tiet san pham.");
+
+    const product = await response.json();
+    state.productModal.product = product;
+    renderProductModal();
+}
+
+async function loadProductReviews(productId) {
+    const response = await fetch(`/api/v1/products/${productId}/reviews?take=20`);
+    if (!response.ok) throw new Error(await readError(response, "Khong the tai danh gia san pham."));
+
+    state.productModal.reviews = await response.json();
+    renderProductReviews();
+}
+
+function renderProductModal() {
+    const product = state.productModal.product;
+    if (!product) return;
+
+    elements.modalTitle.textContent = product.name || "San pham";
+    elements.modalCategory.textContent = product.category || "General";
+    elements.modalDescription.textContent = product.description || "Chua co mo ta.";
+    elements.modalPrice.textContent = formatCurrency(product.price);
+    elements.modalStock.textContent = `Ton kho: ${product.stock ?? 0}`;
+
+    const summary = state.productModal.reviews;
+    if (summary) {
+        const avg = Number(summary.averageRating || 0);
+        elements.modalAverageNumber.textContent = avg.toFixed(1);
+        renderStars(elements.modalStars, avg);
+        elements.modalRatingLabel.textContent = `${summary.totalReviews || 0} danh gia`;
+    }
+}
+
+function renderProductReviews() {
+    const summary = state.productModal.reviews;
+    renderProductModal();
+
+    if (!summary || !(summary.items || []).length) {
+        elements.reviewsList.textContent = "Chua co danh gia nao.";
+        return;
+    }
+
+    elements.reviewsList.innerHTML = "";
+
+    (summary.items || []).forEach(item => {
+        const node = elements.reviewItemTemplate.content.cloneNode(true);
+        const identity = node.querySelector(".review-user");
+        const stars = node.querySelector(".stars");
+        const comment = node.querySelector(".review-comment");
+        const date = node.querySelector(".review-date");
+
+        identity.textContent = formatReviewUser(item.userId);
+        renderStars(stars, Number(item.rating || 0), true);
+        comment.textContent = item.comment || "";
+        date.textContent = formatDateTime(item.createdAt);
+
+        elements.reviewsList.appendChild(node);
+    });
+}
+
+function formatReviewUser(userId) {
+    const currentUserId = getCurrentUserId();
+    const shortId = String(userId || "").slice(0, 8);
+
+    if (currentUserId && String(currentUserId).toLowerCase() === String(userId || "").toLowerCase()) {
+        return `Ban (${shortId})`;
+    }
+
+    return `User ${shortId}`;
+}
+
+function getCurrentUserId() {
+    return state.user?.id || state.user?.Id || null;
+}
+
+function renderStars(container, rating, small = false) {
+    const value = Math.max(0, Math.min(5, Number(rating || 0)));
+    const filled = Math.round(value);
+
+    container.classList.toggle("small", Boolean(small));
+    container.innerHTML = "";
+
+    for (let index = 1; index <= 5; index += 1) {
+        const star = document.createElement("span");
+        star.className = `star${index <= filled ? " filled" : ""}`;
+        star.setAttribute("aria-hidden", "true");
+        container.appendChild(star);
+    }
+}
+
+function setupRatingPicker(initialRating) {
+    elements.ratingPicker.innerHTML = "";
+
+    for (let rating = 1; rating <= 5; rating += 1) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "star-choice";
+        button.setAttribute("role", "radio");
+        button.setAttribute("aria-label", `${rating} sao`);
+        button.dataset.rating = String(rating);
+
+        const star = document.createElement("span");
+        star.className = "star";
+        star.setAttribute("aria-hidden", "true");
+        button.appendChild(star);
+
+        button.addEventListener("click", () => setPickerRating(rating));
+        elements.ratingPicker.appendChild(button);
+    }
+
+    setPickerRating(initialRating);
+}
+
+function setPickerRating(rating) {
+    const safeRating = Math.max(1, Math.min(5, Number(rating || 5)));
+    const input = elements.reviewForm.querySelector("input[name='rating']");
+    input.value = String(safeRating);
+
+    const choices = Array.from(elements.ratingPicker.querySelectorAll(".star-choice"));
+    choices.forEach((button, index) => {
+        const current = index + 1;
+        const checked = current === safeRating;
+        button.setAttribute("aria-checked", checked ? "true" : "false");
+
+        const star = button.querySelector(".star");
+        star.classList.toggle("filled", current <= safeRating);
+    });
+}
+
+function syncReviewFormState() {
+    const canReview = Boolean(state.token) && Boolean(state.productModal.productId);
+    const message = !state.token
+        ? "Dang nhap role User de gui danh gia."
+        : "Danh gia chi duoc phep khi ban da mua san pham (don COMPLETED).";
+
+    elements.reviewForm.querySelector("button[type='submit']").disabled = !canReview;
+    elements.reviewForm.querySelector("textarea[name='comment']").disabled = !canReview;
+    elements.ratingPicker.querySelectorAll("button").forEach(button => {
+        button.disabled = !canReview;
+    });
+
+    if (!canReview) {
+        setReviewMessage(message);
+    }
+}
+
+async function handleReviewSubmit(event) {
+    event.preventDefault();
+    if (!state.token) {
+        setReviewMessage("Can dang nhap truoc khi gui danh gia.");
+        return;
+    }
+
+    const productId = state.productModal.productId;
+    if (!productId) {
+        setReviewMessage("Khong tim thay san pham de danh gia.");
+        return;
+    }
+
+    const form = new FormData(event.currentTarget);
+    const rating = Number(form.get("rating") || 5);
+    const comment = String(form.get("comment") || "").trim();
+
+    if (!comment) {
+        setReviewMessage("Vui long nhap comment.");
+        return;
+    }
+
+    setReviewMessage("Dang gui danh gia...");
+
+    try {
+        const response = await fetch("/api/v1/reviews", {
+            method: "POST",
+            headers: authorizedJsonHeaders(),
+            body: JSON.stringify({
+                productId,
+                rating,
+                comment
+            })
+        });
+
+        if (!response.ok) throw new Error(await readError(response, "Khong the gui danh gia."));
+
+        event.currentTarget.reset();
+        setPickerRating(5);
+        setReviewMessage("Da gui danh gia. Cam on ban!");
+        await loadProductReviews(productId);
+    } catch (error) {
+        setReviewMessage(error.message);
+    }
+}
+
+function setReviewMessage(message) {
+    elements.reviewMessage.textContent = message || "";
+}
+
+function formatDateTime(value) {
+    const date = value ? new Date(value) : null;
+    if (!date || Number.isNaN(date.getTime())) return "";
+
+    return new Intl.DateTimeFormat("vi-VN", {
+        dateStyle: "medium",
+        timeStyle: "short"
+    }).format(date);
+}
+
 function syncAuthUi() {
     const userLabel = state.user?.email || state.user?.Email || "Khach truy cap";
     elements.sessionState.textContent = state.token ? "Da dang nhap" : "Khach truy cap";
@@ -452,6 +737,7 @@ function syncAuthUi() {
         : "Chua co token. Mot so tinh nang se chi doc.";
     renderCart();
     renderOrders();
+    syncReviewFormState();
 }
 
 function logout() {

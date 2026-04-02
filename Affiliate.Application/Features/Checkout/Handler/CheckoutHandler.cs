@@ -35,6 +35,8 @@ public class CheckoutHandler : IRequestHandler<CheckoutCommand, OrderDTO>
                 order.FinalAmount,
                 order.Coupon?.Code,
                 order.IsPaid,
+                order.Status,
+                order.LoyaltyPointsAwarded,
                 order.CreatedAt);
         }
         catch

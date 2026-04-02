@@ -6,12 +6,13 @@ public class OrderItems
     public decimal Price { get; private set; }
     public int Quantity { get; private set; }
     public Orders Order { get; private set; } = null!;
+    public Guid ProductId { get; private set; }
 
     private OrderItems()
     {
     }
 
-    public OrderItems(string productName, decimal price, int quantity)
+    public OrderItems(Guid productId, string productName, decimal price, int quantity)
     {
         if (string.IsNullOrWhiteSpace(productName))
             throw new ArgumentException("Product name is required", nameof(productName));
@@ -20,6 +21,7 @@ public class OrderItems
             throw new ArgumentException("Quantity must be greater than 0", nameof(quantity));
 
         Id = Guid.NewGuid();
+        ProductId = productId;
         ProductName = productName;
         Price = price;
         Quantity = quantity;

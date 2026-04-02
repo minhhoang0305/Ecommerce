@@ -6,5 +6,9 @@ public class User
     public string Email { get; set; } = default!;
     public string PasswordHash { get; set; } = default!;
     public string Role { get; set; } = "User";
+
+    // Loyalty / ranking
+    public int LoyaltyPoints { get; set; } = 0;
+    public string MemberRank { get; set; } = "Silver";
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

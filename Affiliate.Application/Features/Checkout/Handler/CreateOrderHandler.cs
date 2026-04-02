@@ -13,10 +13,8 @@ public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, Guid>
     {
         var order = new Orders();
 
-
-
         foreach (var item in request.Items)
-            order.AddItem(item.ProductName, item.Price, item.Quantity);
+            order.AddItem(item.ProductId, item.ProductName, item.Price, item.Quantity);
 
         await _orderRepository.SaveAsync(order);
         return order.Id;

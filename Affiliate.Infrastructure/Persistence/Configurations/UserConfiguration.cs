@@ -21,5 +21,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.PasswordHash)
             .IsRequired();
+
+        builder.Property(x => x.LoyaltyPoints)
+            .HasDefaultValue(0);
+
+        builder.Property(x => x.MemberRank)
+            .IsRequired()
+            .HasMaxLength(20)
+            .HasDefaultValue("Silver");
     }
 }

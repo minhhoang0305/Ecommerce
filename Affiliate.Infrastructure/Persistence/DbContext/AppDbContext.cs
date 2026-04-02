@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
     public DbSet<Orders> Orders => Set<Orders>();
     public DbSet<OrderItems> OrderItems => Set<OrderItems>();
     public DbSet<Coupon> Coupon => Set<Coupon>();
+    public DbSet<Review> Reviews => Set<Review>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)

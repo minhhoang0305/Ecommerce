@@ -23,6 +23,8 @@ public class GetUserOrdersHandler : IRequestHandler<GetUserOrdersQuery, IReadOnl
                 order.FinalAmount,
                 order.Coupon?.Code,
                 order.IsPaid,
+                order.Status,
+                order.LoyaltyPointsAwarded,
                 order.CreatedAt))
             .ToList();
     }

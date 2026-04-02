@@ -1,12 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Affiliate.Application.Loyalty;
 
 public class OrderRepository : IOrderRepository
 {
     private readonly AppDbContext _context;
+    private readonly LoyaltyOptions _loyaltyOptions;
 
-    public OrderRepository(AppDbContext context)
+    public OrderRepository(AppDbContext context, IOptions<LoyaltyOptions> loyaltyOptions)
     {
         _context = context;
+        _loyaltyOptions = loyaltyOptions.Value ?? new LoyaltyOptions();
     }
 
     public async Task SaveAsync(Orders order)
@@ -32,6 +36,13 @@ public class OrderRepository : IOrderRepository
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
     }
+
+    public async Task<bool> HasUserPurchasedProductAsync(Guid userId, Guid productId)
+{
+    return await _context.Orders
+        .Where(o => o.UserId == userId && o.Status == Orders.StatusCompleted)
+        .AnyAsync(o => o.Items.Any(i => i.ProductId == productId));
+}
 
     public async Task<Orders> CheckoutAsync(Guid userId, string paymentMethod, string? couponCode, CancellationToken cancellationToken)
     {
@@ -65,7 +76,7 @@ public class OrderRepository : IOrderRepository
                 throw new Exception($"Product {product.Name} does not have enough stock");
 
             product.Stock -= cartItem.Quantity;
-            order.AddItem(product.Name, product.Price, cartItem.Quantity);
+            order.AddItem(product.Id, product.Name, product.Price, cartItem.Quantity);
         }
 
         if (!string.IsNullOrWhiteSpace(couponCode))
@@ -79,6 +90,17 @@ public class OrderRepository : IOrderRepository
 
             order.ApplyCoupon(coupon);
             coupon.TimesUsed++;
+        }
+
+        // Apply rank discount based on user's current member rank.
+        var rank = await _context.Users
+            .Where(x => x.Id == userId)
+            .Select(x => x.MemberRank)
+            .FirstOrDefaultAsync(cancellationToken);
+        var rankPercent = LoyaltyRanker.GetDiscountPercent(rank, _loyaltyOptions);
+        if (rankPercent > 0)
+        {
+            order.SetRankDiscountPercent(rankPercent);
         }
 
         if (!string.Equals(paymentMethod, "VNPAY", StringComparison.OrdinalIgnoreCase))
@@ -127,7 +149,7 @@ public class OrderRepository : IOrderRepository
             if (product.Stock < cartItem.Quantity)
                 throw new Exception($"Product {product.Name} does not have enough stock");
 
-            order.AddItem(product.Name, product.Price, cartItem.Quantity);
+            order.AddItem(product.Id, product.Name, product.Price, cartItem.Quantity);
         }
 
         if (!string.IsNullOrWhiteSpace(couponCode))
@@ -140,6 +162,17 @@ public class OrderRepository : IOrderRepository
                 throw new Exception("Coupon not found");
 
             order.ApplyCoupon(coupon);
+        }
+
+        // Apply rank discount based on user's current member rank.
+        var rank = await _context.Users
+            .Where(x => x.Id == userId)
+            .Select(x => x.MemberRank)
+            .FirstOrDefaultAsync(cancellationToken);
+        var rankPercent = LoyaltyRanker.GetDiscountPercent(rank, _loyaltyOptions);
+        if (rankPercent > 0)
+        {
+            order.SetRankDiscountPercent(rankPercent);
         }
 
         await _context.Orders.AddAsync(order, cancellationToken);
