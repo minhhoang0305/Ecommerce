@@ -2,9 +2,9 @@ using System.Security.Claims;
 
 public static class ClaimsPrincipalExtensions
 {
-    public static bool TryGetUserId(this ClaimsPrincipal user, out Guid userId)
+    public static bool TryGetUserId(this ClaimsPrincipal user, out int userId)
     {
         var userIdClaim = user.FindFirstValue(ClaimTypes.NameIdentifier);
-        return Guid.TryParse(userIdClaim, out userId);
+        return int.TryParse(userIdClaim, out userId);
     }
 }

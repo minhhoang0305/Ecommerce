@@ -1,6 +1,6 @@
 using MediatR;
 
-public class CreateHandler : IRequestHandler<CreateCommand, Guid>
+public class CreateHandler : IRequestHandler<CreateCommand, int>
 {
     private readonly IProductRepository _productRepository;
 
@@ -9,11 +9,10 @@ public class CreateHandler : IRequestHandler<CreateCommand, Guid>
         _productRepository = productRepository;
     }
 
-    public async Task<Guid> Handle(CreateCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateCommand request, CancellationToken cancellationToken)
     {
         var product = new Products
         {
-            Id = Guid.NewGuid(),
             Name = request.Name,
             Category = request.Category,
             Price = request.Price,

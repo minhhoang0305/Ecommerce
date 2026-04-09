@@ -1,3 +1,3 @@
 using MediatR;
 
-public record UpdateCartItemCommand(Guid CartItemId, int Quantity, Guid UserId) : IRequest<Unit>;
+public record UpdateCartItemCommand(int CartItemId, int Quantity, int UserId) : IRequest<Unit>;

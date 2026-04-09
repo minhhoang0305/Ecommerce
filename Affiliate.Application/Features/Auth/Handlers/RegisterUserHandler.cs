@@ -1,7 +1,7 @@
 using MediatR;
 using Affiliate.Domain.Entities;
 
-public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Guid>
+public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, int>
 {
     private readonly IUserRepository _userRepository;
 
@@ -10,9 +10,9 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Guid>
         _userRepository = userRepository;
     }
 
-    public async Task<Guid> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        // Check email tồn tại
+        // Check email
         var exists = await _userRepository.ExistsByEmailAsync(request.Email);
         if (exists)
             throw new Exception("Email already exists");
@@ -23,7 +23,6 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Guid>
 
         var user = new User
         {
-            Id = Guid.NewGuid(),
             Email = request.Email,
             PasswordHash = passwordHash,
             Role = request.Role

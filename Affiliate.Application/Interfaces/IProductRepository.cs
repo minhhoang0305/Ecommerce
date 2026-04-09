@@ -1,7 +1,7 @@
 public interface IProductRepository
 {
-    Task<Guid> CreateAsync(Products product);
-    Task<Products?> GetByIdAsync(Guid id);
+    Task<int> CreateAsync(Products product);
+    Task<Products?> GetByIdAsync(int id);
     Task<IEnumerable<Products>> GetAllAsync();
     Task<(IReadOnlyList<Products> Items, int TotalCount)> GetPagedAsync(
         int page,
@@ -9,6 +9,6 @@ public interface IProductRepository
         string? category,
         decimal? minPrice,
         decimal? maxPrice);
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(int id);
     Task UpdateAsync(Products product);
 }

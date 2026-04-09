@@ -1,2 +1,2 @@
 using MediatR;
-public record GetByIdAsync(Guid Id) : IRequest<Products?>;
+public record GetByIdAsync(int Id) : IRequest<Products?>;

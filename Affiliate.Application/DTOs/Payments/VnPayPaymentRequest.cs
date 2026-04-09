@@ -1,5 +1,5 @@
 public record VnPayPaymentRequest(
-    Guid OrderId,
+    int OrderId,
     decimal Amount,
     string OrderInfo,
     string ReturnUrl,

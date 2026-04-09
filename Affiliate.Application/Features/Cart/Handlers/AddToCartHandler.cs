@@ -1,5 +1,5 @@
 using MediatR;
-public class AddToCartHandler : IRequestHandler<AddToCartCommand, Unit>
+public class AddToCartHandler : IRequestHandler<AddToCartCommand, CartAddItemResult>
 {
     private readonly IProductRepository _productRepo;
     private readonly ICartRepository _cartRepo;
@@ -10,7 +10,7 @@ public class AddToCartHandler : IRequestHandler<AddToCartCommand, Unit>
         _cartRepo = cartRepo;
     }
 
-    public async Task<Unit> Handle(AddToCartCommand request, CancellationToken cancellationToken)
+    public async Task<CartAddItemResult> Handle(AddToCartCommand request, CancellationToken cancellationToken)
     {
         var product = await _productRepo.GetByIdAsync(request.ProductId);
 
@@ -26,7 +26,6 @@ public class AddToCartHandler : IRequestHandler<AddToCartCommand, Unit>
         {
             cart = new Cart
             {
-                Id = Guid.NewGuid(),
                 UserId = request.UserId,
                 Items = new List<CartItem>()
             };
@@ -57,6 +56,26 @@ public class AddToCartHandler : IRequestHandler<AddToCartCommand, Unit>
 
         await _cartRepo.SaveAsync(cart);
 
-        return Unit.Value;
+        var affectedItem = cart.Items.FirstOrDefault(x => x.ProductId == product.Id);
+        if (affectedItem == null)
+            throw new Exception("Cart item not found after save");
+
+        // If the cart was rehydrated inside repository logic, the Id might not be on the original instance.
+        if (affectedItem.Id == 0)
+        {
+            var reloaded = await _cartRepo.GetByUserIdAsync(request.UserId);
+            affectedItem = reloaded?.Items.FirstOrDefault(x => x.ProductId == product.Id);
+            if (reloaded != null) cart = reloaded;
+            if (affectedItem == null)
+                throw new Exception("Cart item not found after reload");
+        }
+
+        return new CartAddItemResult(
+            cart.Id,
+            affectedItem.Id,
+            affectedItem.ProductId,
+            affectedItem.Name,
+            affectedItem.Price,
+            affectedItem.Quantity);
     }
 }

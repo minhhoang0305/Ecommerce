@@ -1,3 +1,3 @@
 using MediatR;
 
-public record ApplyCouponCommand(Guid OrderId, string Code) : IRequest<Coupon>;
+public record ApplyCouponCommand(int OrderId, string Code) : IRequest<Coupon>;

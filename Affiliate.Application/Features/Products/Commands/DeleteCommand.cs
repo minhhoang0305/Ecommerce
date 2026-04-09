@@ -1,2 +1,2 @@
 using MediatR;
-public record DeleteCommand(Guid Id) : IRequest<Unit>;
+public record DeleteCommand(int Id) : IRequest<Unit>;

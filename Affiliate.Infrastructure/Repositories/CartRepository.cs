@@ -9,7 +9,7 @@ public class CartRepository : ICartRepository
         _context = context;
     }
 
-    public async Task<Cart?> GetByUserIdAsync(Guid userId)
+    public async Task<Cart?> GetByUserIdAsync(int userId)
     {
         return await _context.Carts
             .Include(c => c.Items)
@@ -41,7 +41,6 @@ public class CartRepository : ICartRepository
                 {
                     trackedCart.Items.Add(new CartItem
                     {
-                        Id = item.Id,
                         ProductId = item.ProductId,
                         Name = item.Name,
                         Price = item.Price,

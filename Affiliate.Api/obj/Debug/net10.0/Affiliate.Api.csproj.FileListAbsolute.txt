@@ -1,6 +1,5 @@
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\appsettings.Development.json
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\appsettings.json
-D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Affiliate.Api.staticwebassets.runtime.json
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Affiliate.Api.staticwebassets.endpoints.json
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Affiliate.Api.exe
 D:\.Net\Affiliate\Affiliate.Api\bin\Debug\net10.0\Affiliate.Api.deps.json
@@ -173,6 +172,3 @@ D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\refint\Affiliate.Api.dll
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.pdb
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\Affiliate.Api.genruntimeconfig.cache
 D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\ref\Affiliate.Api.dll
-D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\compressed\n4mntbqkcj-{0}-qqwmz4hpww-qqwmz4hpww.gz
-D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\compressed\6tyzkhhlc3-{0}-vgdfd4a9p1-vgdfd4a9p1.gz
-D:\.Net\Affiliate\Affiliate.Api\obj\Debug\net10.0\compressed\w7tlg0q32k-{0}-ljm4gfkijp-ljm4gfkijp.gz

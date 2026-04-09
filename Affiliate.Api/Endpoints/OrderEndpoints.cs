@@ -29,13 +29,19 @@ public static class OrderEndpoint
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var order = await mediator.Send(new CheckoutCommand(userId, request.PaymentMethod, request.CouponCode));
+            var order = await mediator.Send(new CheckoutCommand(
+                userId,
+                request.PaymentMethod,
+                request.CouponCode,
+                request.Name,
+                request.Address,
+                request.PhoneNumber));
             return Results.Ok(order);
         }).RequireAuthorization("UserOnly").WithTags("Order");
 
         // Admin marks an order as COMPLETED -> awards loyalty points to the user.
-        app.MapPost("api/v1/orders/{id:guid}/complete", async (
-            Guid id,
+        app.MapPost("api/v1/orders/{id:int}/complete", async (
+            int id,
             IMediator mediator) =>
         {
             var result = await mediator.Send(new CompleteOrderCommand(id));
@@ -52,11 +58,17 @@ public static class OrderEndpoint
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var order = await orderRepository.CreatePendingVnPayOrderAsync(userId, request.CouponCode, httpContext.RequestAborted);
+            var order = await orderRepository.CreatePendingVnPayOrderAsync(
+                userId,
+                request.CouponCode,
+                request.Name,
+                request.Address,
+                request.PhoneNumber,
+                httpContext.RequestAborted);
             var paymentUrl = vnPayService.CreatePaymentUrl(new VnPayPaymentRequest(
                 order.Id,
                 order.FinalAmount,
-                $"Thanh toan don hang {order.Id:N}",
+                $"Thanh toan don hang {order.Id}",
                 BuildAbsoluteUrl(httpContext, "/api/v1/payments/vnpay/return"),
                 GetClientIpAddress(httpContext)));
 
@@ -80,7 +92,7 @@ public static class OrderEndpoint
             if (!validation.IsValidSignature || string.IsNullOrWhiteSpace(validation.OrderReference))
                 return Results.Redirect(redirectUrl);
 
-            if (Guid.TryParseExact(validation.OrderReference, "N", out var orderId))
+            if (int.TryParse(validation.OrderReference, out var orderId))
             {
                 var order = await orderRepository.GetByIdAsync(orderId);
                 if (order is not null && validation.IsSuccess && !order.IsPaid && AreSameAmount(order.FinalAmount, validation.Amount))
@@ -118,7 +130,7 @@ public static class OrderEndpoint
                 return Results.Json(new { RspCode = "97", Message = "Invalid signature" });
             }
 
-            if (!Guid.TryParseExact(validation.OrderReference, "N", out var orderId))
+            if (!int.TryParse(validation.OrderReference, out var orderId))
             {
                 return Results.Json(new { RspCode = "01", Message = "Order not found" });
             }

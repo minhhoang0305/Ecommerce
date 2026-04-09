@@ -2,7 +2,7 @@ using Affiliate.Domain.Entities;
 
 public class Coupon
 {
-    public Guid Id {get; set;}
+    public int Id {get; set;}
     public string Code {get; set;} = null!;
     public DiscountType DiscountType {get; set;}
     public decimal Value {get; set;}

@@ -1,3 +1,3 @@
 using MediatR;
 
-public record RegisterUserCommand(string Email, string Password, string Role) : IRequest<Guid>;
+public record RegisterUserCommand(string Email, string Password, string Role) : IRequest<int>;

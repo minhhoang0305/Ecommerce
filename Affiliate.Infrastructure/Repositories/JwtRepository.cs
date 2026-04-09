@@ -12,7 +12,7 @@ public class JwtRepository : IJwtRepository
     {
         _configuration = configuration;
     }
-    public string GenerateToken(Guid userId, string email, string role)
+    public string GenerateToken(int userId, string email, string role)
     {
         var jwtKey = _configuration["Jwt:Key"] 
                 ?? Environment.GetEnvironmentVariable("JWT_KEY");

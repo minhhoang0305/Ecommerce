@@ -1,6 +1,6 @@
 using MediatR;
 
-public class CreateCouponHandler : IRequestHandler<CreateCouponCommand, Guid>
+public class CreateCouponHandler : IRequestHandler<CreateCouponCommand, int>
 {
     private readonly ICouponRepository _couponRepository;
 
@@ -9,7 +9,7 @@ public class CreateCouponHandler : IRequestHandler<CreateCouponCommand, Guid>
         _couponRepository = couponRepository;
     }
 
-    public async Task<Guid> Handle(CreateCouponCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateCouponCommand request, CancellationToken cancellationToken)
     {
         var existingCoupon = await _couponRepository.GetByCodeAsync(request.Code);
         if (existingCoupon != null)
@@ -17,7 +17,6 @@ public class CreateCouponHandler : IRequestHandler<CreateCouponCommand, Guid>
 
         var coupon = new Coupon
         {
-            Id = Guid.NewGuid(),
             Code = request.Code.Trim(),
             DiscountType = request.DiscountType,
             Value = request.Value,

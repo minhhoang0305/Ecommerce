@@ -1,7 +1,8 @@
 using MediatR;
 using Affiliate.Domain.Entities;
+using Affiliate.Application.DTOs.Reviews;
 
-public class CreateReviewHandler : IRequestHandler<CreateReviewCommand, Guid>
+public class CreateReviewHandler : IRequestHandler<CreateReviewCommand, ReviewItemDto>
 {
     private readonly IReviewRepository _reviewRepository;
     private readonly IOrderRepository _orderRepository;
@@ -14,11 +15,11 @@ public class CreateReviewHandler : IRequestHandler<CreateReviewCommand, Guid>
         _orderRepository = orderRepository;
     }
 
-    public async Task<Guid> Handle(CreateReviewCommand request, CancellationToken cancellationToken)
+    public async Task<ReviewItemDto> Handle(CreateReviewCommand request, CancellationToken cancellationToken)
     {
         var userId = request.UserId;
 
-        // Check đã mua
+        // Check purchased
         var hasPurchased = await _orderRepository
             .HasUserPurchasedProductAsync(userId, request.ProductId);
 
@@ -42,6 +43,6 @@ public class CreateReviewHandler : IRequestHandler<CreateReviewCommand, Guid>
 
         await _reviewRepository.AddAsync(review);
 
-        return review.Id;
+        return new ReviewItemDto(review.Id, review.UserId, review.Rating, review.Comment, review.CreatedAt);
     }
 }

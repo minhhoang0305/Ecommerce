@@ -1,7 +1,7 @@
 namespace Affiliate.Application.DTOs;
 
 public record OrderDTO(
-    Guid Id,
+    int Id,
     List<OrderItemDTO> Items,
     decimal TotalAmount,
     decimal Discount,
@@ -10,4 +10,7 @@ public record OrderDTO(
     bool IsPaid,
     string Status,
     int LoyaltyPointsAwarded,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    string? Name,
+    string? Address,
+    string? PhoneNumber);

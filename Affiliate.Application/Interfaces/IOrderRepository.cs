@@ -2,13 +2,13 @@ using Affiliate.Domain.Entities;
 
 public interface IOrderRepository
 {
-    Task<Orders?> GetByIdAsync(Guid id);
-    Task<IReadOnlyList<Orders>> GetByUserIdAsync(Guid userId);
-    Task<bool> HasUserPurchasedProductAsync(Guid userId, Guid productId);
-    Task<Orders> CheckoutAsync(Guid userId, string paymentMethod, string? couponCode, CancellationToken cancellationToken);
-    Task<Orders> CreatePendingVnPayOrderAsync(Guid userId, string? couponCode, CancellationToken cancellationToken);
-    Task FinalizePendingVnPayOrderAsync(Guid orderId, CancellationToken cancellationToken);
-    Task DeletePendingOrderAsync(Guid orderId, CancellationToken cancellationToken);
+    Task<Orders?> GetByIdAsync(int id);
+    Task<IReadOnlyList<Orders>> GetByUserIdAsync(int userId);
+    Task<bool> HasUserPurchasedProductAsync(int userId, int productId);
+    Task<Orders> CheckoutAsync(int userId, string paymentMethod, string? couponCode, string? Name, string? address, string? phoneNumber, CancellationToken cancellationToken);
+    Task<Orders> CreatePendingVnPayOrderAsync(int userId, string? couponCode, string? Name, string? address, string? phoneNumber, CancellationToken cancellationToken);
+    Task FinalizePendingVnPayOrderAsync(int orderId, CancellationToken cancellationToken);
+    Task DeletePendingOrderAsync(int orderId, CancellationToken cancellationToken);
     Task UpdateAsync(Orders order);
     Task SaveAsync(Orders order);
 }

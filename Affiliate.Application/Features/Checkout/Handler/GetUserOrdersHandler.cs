@@ -25,7 +25,10 @@ public class GetUserOrdersHandler : IRequestHandler<GetUserOrdersQuery, IReadOnl
                 order.IsPaid,
                 order.Status,
                 order.LoyaltyPointsAwarded,
-                order.CreatedAt))
+                order.CreatedAt,
+                order.CustomerName,
+                order.Address,
+                order.PhoneNumber))
             .ToList();
     }
 }

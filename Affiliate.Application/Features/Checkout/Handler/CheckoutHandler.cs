@@ -23,6 +23,9 @@ public class CheckoutHandler : IRequestHandler<CheckoutCommand, OrderDTO>
                 request.UserId,
                 request.PaymentMethod,
                 request.CouponCode,
+                request.Name,
+                request.Address,
+                request.PhoneNumber,
                 cancellationToken);
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
@@ -37,7 +40,10 @@ public class CheckoutHandler : IRequestHandler<CheckoutCommand, OrderDTO>
                 order.IsPaid,
                 order.Status,
                 order.LoyaltyPointsAwarded,
-                order.CreatedAt);
+                order.CreatedAt,
+                order.CustomerName,
+                order.Address,
+                order.PhoneNumber);
         }
         catch
         {

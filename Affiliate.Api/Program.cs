@@ -88,7 +88,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API documentation for Affiliate.Api"
     });
 
-    // Thêm cấu hình bảo mật JWT vào Swagger
+    // JWT vào Swagger
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -125,9 +125,6 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -138,6 +135,5 @@ app.MapCartEndpoints();
 app.MapOrderEndpoints();
 app.MapCouponEndpoints();
 app.MapReviewEndpoints();
-app.MapFallbackToFile("index.html");
 
 app.Run();

@@ -1,3 +1,3 @@
 using MediatR;
 
-public record UpdateCommand(Guid Id, string Name, string Category, decimal Price, string Description, int Stock) : IRequest<Unit>;
+public record UpdateCommand(int Id, string Name, string Category, decimal Price, string Description, int Stock, bool IsDelete) : IRequest<Unit>;

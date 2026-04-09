@@ -1,6 +1,6 @@
 public interface IReviewRepository
 {
     Task AddAsync(Review review);
-    Task<bool> ExistAsync(Guid UserId, Guid ProductId);
-    Task<IReadOnlyList<Review>> GetByProductIdAsync(Guid productId, int take = 20);
+    Task<bool> ExistAsync(int UserId, int ProductId);
+    Task<IReadOnlyList<Review>> GetByProductIdAsync(int productId, int take = 20);
 }

@@ -19,7 +19,7 @@ public class OrderRepository : IOrderRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Orders?> GetByIdAsync(Guid id)
+    public async Task<Orders?> GetByIdAsync(int id)
     {
         return await _context.Orders
             .Include(x => x.Items)
@@ -27,7 +27,7 @@ public class OrderRepository : IOrderRepository
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<IReadOnlyList<Orders>> GetByUserIdAsync(Guid userId)
+    public async Task<IReadOnlyList<Orders>> GetByUserIdAsync(int userId)
     {
         return await _context.Orders
             .Include(x => x.Items)
@@ -37,14 +37,14 @@ public class OrderRepository : IOrderRepository
             .ToListAsync();
     }
 
-    public async Task<bool> HasUserPurchasedProductAsync(Guid userId, Guid productId)
-{
-    return await _context.Orders
-        .Where(o => o.UserId == userId && o.Status == Orders.StatusCompleted)
-        .AnyAsync(o => o.Items.Any(i => i.ProductId == productId));
-}
+    public async Task<bool> HasUserPurchasedProductAsync(int userId, int productId)
+    {
+        return await _context.Orders
+            .Where(o => o.UserId == userId && o.Status == Orders.StatusCompleted)
+            .AnyAsync(o => o.Items.Any(i => i.ProductId == productId));
+    }
 
-    public async Task<Orders> CheckoutAsync(Guid userId, string paymentMethod, string? couponCode, CancellationToken cancellationToken)
+    public async Task<Orders> CheckoutAsync(int userId, string paymentMethod, string? couponCode, string? Name, string? address, string? phoneNumber, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(paymentMethod))
             throw new Exception("Payment method is required");
@@ -60,7 +60,10 @@ public class OrderRepository : IOrderRepository
 
         var order = new Orders
         {
-            UserId = userId
+            UserId = userId,
+            CustomerName = Name,
+            Address = address,
+            PhoneNumber = phoneNumber
         };
 
         foreach (var cartItem in cart.Items)
@@ -127,7 +130,7 @@ public class OrderRepository : IOrderRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Orders> CreatePendingVnPayOrderAsync(Guid userId, string? couponCode, CancellationToken cancellationToken)
+    public async Task<Orders> CreatePendingVnPayOrderAsync(int userId, string? couponCode, string? customerName, string? address, string? phoneNumber, CancellationToken cancellationToken)
     {
         var cart = await _context.Carts
             .Include(c => c.Items)
@@ -138,7 +141,10 @@ public class OrderRepository : IOrderRepository
 
         var order = new Orders
         {
-            UserId = userId
+            UserId = userId,
+            CustomerName = customerName,
+            Address = address,
+            PhoneNumber = phoneNumber
         };
 
         foreach (var cartItem in cart.Items)
@@ -188,7 +194,7 @@ public class OrderRepository : IOrderRepository
         return order;
     }
 
-    public async Task FinalizePendingVnPayOrderAsync(Guid orderId, CancellationToken cancellationToken)
+    public async Task FinalizePendingVnPayOrderAsync(int orderId, CancellationToken cancellationToken)
     {
         var order = await _context.Orders
             .Include(x => x.Items)
@@ -238,7 +244,7 @@ public class OrderRepository : IOrderRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeletePendingOrderAsync(Guid orderId, CancellationToken cancellationToken)
+    public async Task DeletePendingOrderAsync(int orderId, CancellationToken cancellationToken)
     {
         var order = await _context.Orders
             .Include(x => x.Items)

@@ -14,7 +14,7 @@ public class LoginUserHandler : IRequestHandler<LoginUserCommand, AuthResponse>
     public async Task<AuthResponse> Handle(LoginUserCommand loginUserCommand, CancellationToken cancellationToken)
     {
         var request = loginUserCommand.Request;
-        // Check email tồn tại
+        // Check email
         var user = await _userRepository.GetByEmailAsync(request.Email);
         if (user == null)
             throw new Exception("Invalid email or password");
@@ -29,7 +29,8 @@ public class LoginUserHandler : IRequestHandler<LoginUserCommand, AuthResponse>
             {
                 user.Id,
                 user.Email,
-                user.Role
+                user.Role,
+                user.MemberRank
             }
         };
 

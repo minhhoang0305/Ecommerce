@@ -9,4 +9,4 @@ public record CreateCouponCommand(
     DateTime StartDate,
     DateTime EndDate,
     bool IsActive,
-    int UsageLimit) : IRequest<Guid>;
+    int UsageLimit) : IRequest<int>;

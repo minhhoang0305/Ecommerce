@@ -7,8 +7,8 @@ public class Orders
     public const string StatusPaid = "PAID";
     public const string StatusCompleted = "COMPLETED";
 
-    public Guid Id { get; private set; } = Guid.NewGuid();
-    public Guid UserId { get; set; }
+    public int Id { get; private set; }
+    public int UserId { get; set; }
     public List<OrderItems> Items { get; private set; } = new();
     public decimal TotalAmount => Items.Sum(item => item.Price * item.Quantity);
     public decimal Discount {get; private set;}
@@ -20,11 +20,14 @@ public class Orders
     public int LoyaltyPointsAwarded { get; private set; }
     public decimal RankDiscount { get; private set; }
 
-    public Guid? CouponId {get; private set;}
+    public int? CouponId {get; private set;}
     public Coupon? Coupon {get; private set;}
+    
+    public string? CustomerName { get; set; }
+    public string? Address { get; set; }
+    public string? PhoneNumber { get; set; }
 
-
-    public void AddItem(Guid ProductId, string productName, decimal price, int quantity)
+    public void AddItem(int ProductId, string productName, decimal price, int quantity)
     {
         if (quantity <= 0)
             throw new ArgumentException("Quantity must be greater than 0", nameof(quantity));

@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using System.Security.Claims;
 using Affiliate.Application.DTOs.Reviews;
 using Affiliate.Domain.Entities;
@@ -6,8 +6,8 @@ public static class ReviewEndpoints
 {
     public static void MapReviewEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/v1/products/{productId:guid}/reviews", async (
-            Guid productId,
+        app.MapGet("/api/v1/products/{productId:int}/reviews", async (
+            int productId,
             int? take,
             IMediator mediator) =>
         {
@@ -22,16 +22,15 @@ public static class ReviewEndpoints
             ClaimsPrincipal user,
             IMediator mediator) =>
         {
-            var userIdClaim = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var id = await mediator.Send(new CreateReviewCommand(
+            var created = await mediator.Send(new CreateReviewCommand(
                 userId,
                 request.ProductId,
                 request.Rating,
                 request.Comment));
-            return Results.Ok(id);
+            return Results.Ok(created);
         }).RequireAuthorization("UserOnly").WithTags("Review");
     }
 }

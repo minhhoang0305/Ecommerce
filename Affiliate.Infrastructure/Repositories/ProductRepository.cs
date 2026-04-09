@@ -10,14 +10,14 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public async Task<Guid> CreateAsync(Products product)
+    public async Task<int> CreateAsync(Products product)
     {
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
         return product.Id;
     }
 
-    public async Task<Products?> GetByIdAsync(Guid id)
+    public async Task<Products?> GetByIdAsync(int id)
     {
         return await _context.Products.FindAsync(id);
     }
@@ -62,7 +62,7 @@ public class ProductRepository : IProductRepository
         return (items, totalCount);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(int id)
     {
         var product = await _context.Products.FindAsync(id);
         if (product == null)

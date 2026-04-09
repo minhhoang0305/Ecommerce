@@ -13,13 +13,13 @@ public class ReviewRepository : IReviewRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> ExistAsync(Guid userId, Guid productId)
+    public async Task<bool> ExistAsync(int userId, int productId)
     {
         return await _context.Reviews
             .AnyAsync(x => x.UserId == userId && x.ProductId == productId);
     }
 
-    public async Task<IReadOnlyList<Review>> GetByProductIdAsync(Guid productId, int take = 20)
+    public async Task<IReadOnlyList<Review>> GetByProductIdAsync(int productId, int take = 20)
     {
         var safeTake = take <= 0 ? 20 : Math.Min(take, 100);
         return await _context.Reviews

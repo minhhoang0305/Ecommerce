@@ -1,6 +1,6 @@
 using MediatR;
 
-public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, Guid>
+public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, int>
 {
     private readonly IOrderRepository _orderRepository;
 
@@ -9,7 +9,7 @@ public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, Guid>
         _orderRepository = orderRepository;
     }
 
-    public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         var order = new Orders();
 

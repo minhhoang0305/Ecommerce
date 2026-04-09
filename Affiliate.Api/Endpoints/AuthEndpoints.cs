@@ -10,7 +10,7 @@ public static class AuthEndpoints
             IMediator mediator) =>
         {
             var userId = await mediator.Send(command);
-            return Results.Ok(new { userId });
+            return Results.Ok(new { userId, email = command.Email });
         }).WithTags("Auth");
 
         app.MapPost("/api/v1/auth/login", async (

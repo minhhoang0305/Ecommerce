@@ -13,7 +13,7 @@ public static class ProductEndpoints
         }).RequireAuthorization("AdminOnly").WithTags("Product");
 
         app.MapGet("/api/v1/product/{id}", async (
-            Guid id,
+            int id,
             IMediator mediator) =>
         {
             var product = await mediator.Send(new GetByIdAsync(id));
@@ -36,19 +36,20 @@ public static class ProductEndpoints
         }).WithTags("Product");
 
         app.MapDelete("/api/v1/product/{id}", async (
-            Guid id,
+            int id,
             IMediator mediator) =>
         {
             await mediator.Send(new DeleteCommand(id));
-            return Results.Ok(new { message = "Product deleted successfully" });
+            return Results.Ok(new {succes = true, message = "Product deleted successfully"});
         }).RequireAuthorization("AdminOnly").WithTags("Product");
 
         app.MapPut("/api/v1/product/update", async (
             UpdateCommand command,
             IMediator mediator) =>
         {
-            await mediator.Send(command);
-            return Results.Ok(new { message = "Product updated successfully" });
+            
+            var update = await mediator.Send(command);
+            return Results.Ok(new { success = true, message = "Product updated successfully", command });
         }).RequireAuthorization("AdminOnly").WithTags("Product");
     }
 }

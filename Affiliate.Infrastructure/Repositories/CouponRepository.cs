@@ -9,7 +9,7 @@ public class CouponRepository : ICouponRepository
         _context = context;
     }
 
-    public async Task<Guid> CreateAsync(Coupon coupon)
+    public async Task<int> CreateAsync(Coupon coupon)
     {
         await _context.Coupon.AddAsync(coupon);
         await _context.SaveChangesAsync();

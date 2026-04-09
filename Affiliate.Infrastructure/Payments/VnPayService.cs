@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,7 +18,8 @@ public class VnPayService : IVnPayService
         EnsureConfigured();
 
         var now = DateTime.UtcNow.AddHours(7);
-        var orderReference = request.OrderId.ToString("N");
+        // For int identity keys, use a plain invariant string as the VNPay transaction reference.
+        var orderReference = request.OrderId.ToString(CultureInfo.InvariantCulture);
         var parameters = new SortedDictionary<string, string>(StringComparer.Ordinal)
         {
             ["vnp_Version"] = "2.1.0",
@@ -117,3 +118,4 @@ public class VnPayService : IVnPayService
         return Convert.ToHexString(hashBytes).ToLowerInvariant();
     }
 }
+

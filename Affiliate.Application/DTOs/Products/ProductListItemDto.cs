@@ -1,7 +1,7 @@
 namespace Affiliate.Application.DTOs.Products;
 
 public record ProductListItemDto(
-    Guid Id,
+    int Id,
     string Name,
     string Category,
     decimal Price,

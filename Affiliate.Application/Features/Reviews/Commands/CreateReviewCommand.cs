@@ -1,8 +1,9 @@
 using MediatR;
+using Affiliate.Application.DTOs.Reviews;
 
 public record CreateReviewCommand(
-    Guid UserId,
-    Guid ProductId,
+    int UserId,
+    int ProductId,
     int Rating,
     string Comment
-) : IRequest<Guid>;
+) : IRequest<ReviewItemDto>;

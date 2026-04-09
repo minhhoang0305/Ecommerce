@@ -1,4 +1,3 @@
 using MediatR;
 
-public record ApplyCouponToCartCommand(Guid UserId, string Code) : IRequest<CartCouponResult>;
-
+public record ApplyCouponToCartCommand(int UserId, string Code) : IRequest<CartCouponResult>;

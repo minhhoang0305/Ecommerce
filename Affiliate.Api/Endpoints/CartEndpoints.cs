@@ -16,8 +16,8 @@ public static class CartEndpoints
             return cart is null ? Results.Ok("Empty") : Results.Ok(cart);
         }).RequireAuthorization("UserOnly").WithTags("Cart");
 
-        app.MapPut("api/v1/cart/items/{id:guid}", async (
-            Guid id,
+        app.MapPut("api/v1/cart/items/{id:int}", async (
+            int id,
             CartQuantityRequest request,
             ClaimsPrincipal user,
             IMediator mediator) =>
@@ -37,8 +37,8 @@ public static class CartEndpoints
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            await mediator.Send(new AddToCartCommand(request.ProductId, request.Quantity, userId));
-            return Results.Ok(new { message = "Item added to cart successfully" });
+            var result = await mediator.Send(new AddToCartCommand(request.ProductId, request.Quantity, userId));
+            return Results.Ok(result);
         }).RequireAuthorization("UserOnly").WithTags("Cart");
 
         app.MapPost("api/v1/cart/apply-coupon", async (

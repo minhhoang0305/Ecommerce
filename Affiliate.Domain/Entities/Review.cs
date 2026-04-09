@@ -1,10 +1,10 @@
 public class Review
 {
-    public Guid Id { get; private set; } = Guid.NewGuid();
+    public int Id { get; private set; }
 
-    public Guid UserId { get; private set; }
+    public int UserId { get; private set; }
 
-    public Guid ProductId { get; private set; }
+    public int ProductId { get; private set; }
 
     public int Rating { get; private set; }
 
@@ -14,7 +14,7 @@ public class Review
 
     private Review() {}
 
-    public Review(Guid userId, Guid productId, int rating, string comment)
+    public Review(int userId, int productId, int rating, string comment)
     {
         if (rating < 1 || rating > 5)
             throw new ArgumentException("Rating must be between 1 and 5");

@@ -1,3 +1,3 @@
 using MediatR;
 
-public record CartCommand(Guid UserId) : IRequest<Cart?>;
+public record CartCommand(int UserId) : IRequest<Cart?>;
