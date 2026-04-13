@@ -1,74 +1,99 @@
-Ecommerce Backend System
-Dự án Backend cho hệ thống thương mại điện tử được xây dựng trên nền tảng .NET 10, áp dụng kiến trúc Clean Architecture và các mẫu thiết kế hiện đại nhằm đảm bảo tính mở rộng, bảo trì dễ dàng và hiệu năng cao.
+🚀 Ecommerce Backend System (.NET 10)
 
-🚀 Công nghệ sử dụng
-Runtime: .NET 10
+Backend cho hệ thống thương mại điện tử, xây dựng trên .NET 10, áp dụng Clean Architecture + các best practices hiện đại nhằm đảm bảo:
 
-Kiến trúc: Clean Architecture (Domain, Application, Infrastructure, API)
+Dễ mở rộng (scalable)
+Dễ bảo trì (maintainable)
+Hiệu năng ổn định (high performance)
+🧱 Tech Stack
+Thành phần	Công nghệ
+Runtime	.NET 10
+Architecture	Clean Architecture
+Pattern	CQRS + MediatR
+Database	SQL Server + EF Core
+Authentication	JWT Bearer
+Payment	VnPay
+Validation	FluentValidation
+API Docs	Swagger / OpenAPI
+🏗️ Kiến trúc hệ thống
 
-Pattern: CQRS với MediatR
+Dự án được chia thành 4 layer chính:
 
-Cơ sở dữ liệu: SQL Server với Entity Framework Core
+1. Domain
+Chứa Entities (Product, Order, Cart, User...)
+Enums
+Business rules (logic cốt lõi)
+2. Application
+DTOs
+Interfaces
+Command / Query (CQRS)
+Handlers (MediatR)
+3. Infrastructure
+Database (EF Core, SQL Server)
+Repositories
+Migrations
+Tích hợp dịch vụ ngoài (VnPay...)
+4. API (Affiliate.Api)
+Controllers / Endpoints
+Middleware
+Dependency Injection
+Config hệ thống
+⚙️ Tính năng chính
+🛍️ Product
+CRUD sản phẩm
+Phân trang danh sách
+🛒 Cart
+Thêm / sửa / xoá sản phẩm
+Tính tổng tiền
+🎟️ Coupon
+Áp dụng mã giảm giá:
+% hoặc số tiền cố định
+📦 Order
+Checkout
+Quản lý trạng thái:
+CREATED
+PAID
+COMPLETED
+💳 Payment
+Tích hợp thanh toán qua VnPay
+⭐ Review
+Người dùng đánh giá sản phẩm
+🔐 Authentication
+Đăng ký / đăng nhập
+Bảo mật bằng JWT
+🎖️ Loyalty System
+Xếp hạng user theo lịch sử mua hàng
+⚡ Setup & Run
+1. Yêu cầu
+.NET 10 SDK
+SQL Server
+2. Clone project
+git clone <your-repo-url>
+cd <your-project>
+3. Cấu hình Database
 
-Xác thực & Phân quyền: JWT Bearer Token
+Mở file:
 
-Thanh toán: Tích hợp cổng thanh toán VnPay
+appsettings.json
 
-Validation: FluentValidation
+Sửa connection string:
 
-Documentation: Swagger / OpenAPI
-
-🏗 Cấu trúc dự án (Clean Architecture)
-Hệ thống được chia thành 4 lớp chính:
-
-Domain: Chứa các thực thể (Entities), Enums và các quy tắc nghiệp vụ cốt lõi (Cart, Order, Product, User...).
-
-Application: Chứa logic nghiệp vụ, các DTOs, Interfaces và các Handler cho Command/Query (sử dụng MediatR).
-
-Infrastructure: Triển khai các Persistence (SQL Server), Repositories, Migrations và các dịch vụ bên thứ ba (VnPay).
-
-Affiliate.Api: Lớp giao tiếp bên ngoài, cấu hình Dependency Injection, Middleware và các Endpoints.
-
-✨ Các tính năng chính
-Quản lý sản phẩm: CRUD sản phẩm, phân trang danh sách.
-
-Giỏ hàng (Cart): Thêm/sửa/xóa sản phẩm, tính toán giá trị giỏ hàng.
-
-Hệ thống Coupon: Áp dụng mã giảm giá (Phần trăm hoặc số tiền cố định) vào giỏ hàng.
-
-Đơn hàng (Order): Quy trình Checkout, quản lý trạng thái đơn hàng.
-
-Thanh toán: Tích hợp quy trình thanh toán qua VnPay Service.
-
-Đánh giá (Review): Cho phép người dùng đánh giá sản phẩm.
-
-Xác thực: Đăng ký, đăng nhập và bảo mật các đầu API bằng JWT.
-
-Loyalty System: Hệ thống xếp hạng thành viên dựa trên lịch sử mua hàng.
-
-🛠 Hướng dẫn cài đặt
-Yêu cầu: Đã cài đặt .NET 10 SDK và SQL Server.
-
-Clone dự án:
-
-Bash
-git clone [url_cua_ban]
-Cấu hình Database:
-Thay đổi chuỗi kết nối tại file appsettings.json trong dự án Affiliate.Api:
-
-JSON
 "ConnectionStrings": {
-  "DefaultConnection": "Server=...;Database=EcommerceDb;..."
+  "DefaultConnection": "Server=...;Database=EcommerceDb;Trusted_Connection=True;"
 }
-Cập nhật Database (Migrations):
-Mở Terminal tại thư mục gốc và chạy:
+4. Migration Database
+dotnet ef database update
+5. Run project
+dotnet run
+6. Swagger
 
-Bash
-dotnet ef database update --project Affiliate.Infrastructure --startup-project Affiliate.Api
-Chạy ứng dụng:
+Sau khi chạy:
 
-Bash
-dotnet run --project Affiliate.Api
-📖 API Documentation
-Sau khi chạy ứng dụng, bạn có thể truy cập Swagger UI để xem chi tiết các đầu API và thử nghiệm:
-https://localhost:[port]/swagger/index.html
+https://localhost:<port>/swagger
+📌 Best Practices áp dụng
+Clean Architecture (tách biệt rõ layer)
+CQRS (tách read/write)
+Dependency Injection
+Validation riêng bằng FluentValidation
+Tách business logic khỏi controller
+Dễ test (unit test friendly)
