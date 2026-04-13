@@ -1,99 +1,142 @@
-🚀 Ecommerce Backend System (.NET 10)
+# 🚀 Ecommerce Backend System (.NET 10)
 
-Backend cho hệ thống thương mại điện tử, xây dựng trên .NET 10, áp dụng Clean Architecture + các best practices hiện đại nhằm đảm bảo:
+Backend cho hệ thống thương mại điện tử xây dựng bằng **.NET 10**, áp dụng **Clean Architecture** + best practices hiện đại.
 
-Dễ mở rộng (scalable)
-Dễ bảo trì (maintainable)
-Hiệu năng ổn định (high performance)
-🧱 Tech Stack
-Thành phần	Công nghệ
-Runtime	.NET 10
-Architecture	Clean Architecture
-Pattern	CQRS + MediatR
-Database	SQL Server + EF Core
-Authentication	JWT Bearer
-Payment	VnPay
-Validation	FluentValidation
-API Docs	Swagger / OpenAPI
-🏗️ Kiến trúc hệ thống
+---
 
-Dự án được chia thành 4 layer chính:
+## ✨ Mục tiêu
 
-1. Domain
-Chứa Entities (Product, Order, Cart, User...)
-Enums
-Business rules (logic cốt lõi)
-2. Application
-DTOs
-Interfaces
-Command / Query (CQRS)
-Handlers (MediatR)
-3. Infrastructure
-Database (EF Core, SQL Server)
-Repositories
-Migrations
-Tích hợp dịch vụ ngoài (VnPay...)
-4. API (Affiliate.Api)
-Controllers / Endpoints
-Middleware
-Dependency Injection
-Config hệ thống
-⚙️ Tính năng chính
-🛍️ Product
-CRUD sản phẩm
-Phân trang danh sách
-🛒 Cart
-Thêm / sửa / xoá sản phẩm
-Tính tổng tiền
-🎟️ Coupon
-Áp dụng mã giảm giá:
-% hoặc số tiền cố định
-📦 Order
-Checkout
-Quản lý trạng thái:
-CREATED
-PAID
-COMPLETED
-💳 Payment
-Tích hợp thanh toán qua VnPay
-⭐ Review
-Người dùng đánh giá sản phẩm
-🔐 Authentication
-Đăng ký / đăng nhập
-Bảo mật bằng JWT
-🎖️ Loyalty System
-Xếp hạng user theo lịch sử mua hàng
-⚡ Setup & Run
-1. Yêu cầu
-.NET 10 SDK
-SQL Server
-2. Clone project
-git clone <your-repo-url>
-cd <your-project>
-3. Cấu hình Database
+- Scalability → dễ mở rộng  
+- Maintainability → dễ bảo trì  
+- Performance → hiệu năng ổn định  
+
+---
+
+## 🧰 Tech Stack
+
+- Runtime: .NET 10  
+- Architecture: Clean Architecture  
+- Pattern: CQRS + MediatR  
+- Database: SQL Server + EF Core  
+- Auth: JWT Bearer  
+- Payment: VnPay  
+- Validation: FluentValidation  
+- Docs: Swagger / OpenAPI  
+
+---
+
+## 🏗️ Architecture Overview
+
+    src/
+    ├── Domain          → Entities, Enums, Business Rules
+    ├── Application     → DTOs, Interfaces, CQRS, Handlers
+    ├── Infrastructure  → EF Core, Repositories, External Services
+    └── API             → Controllers, Middleware, DI, Config
+
+---
+
+## ⚙️ Features
+
+### 🛍️ Product
+- CRUD sản phẩm  
+- Phân trang  
+
+### 🛒 Cart
+- Thêm / sửa / xoá sản phẩm  
+- Tính tổng tiền  
+
+### 🎟️ Coupon
+- Giảm giá theo:
+  - %
+  - số tiền cố định  
+
+### 📦 Order
+- Checkout  
+- Trạng thái:
+  - CREATED  
+  - PAID  
+  - COMPLETED  
+
+### 💳 Payment
+- Thanh toán qua VnPay  
+
+### ⭐ Review
+- Đánh giá sản phẩm  
+
+### 🔐 Authentication
+- Đăng ký / đăng nhập  
+- JWT bảo mật API  
+
+### 🏆 Loyalty
+- Xếp hạng user theo lịch sử mua hàng  
+
+---
+
+## ⚡ Setup & Run
+
+### 1. Requirements
+
+- .NET 10 SDK  
+- SQL Server  
+
+---
+
+### 2. Clone project
+
+```bash
+git clone <your-repo>
+cd <project-folder>
+```
+
+---
+
+### 3. Config Database
 
 Mở file:
 
+```bash
 appsettings.json
+```
 
 Sửa connection string:
 
-"ConnectionStrings": {
-  "DefaultConnection": "Server=...;Database=EcommerceDb;Trusted_Connection=True;"
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=...;Database=EcommerceDb;Trusted_Connection=True;"
+  }
 }
-4. Migration Database
+```
+
+---
+
+### 4. Migration
+
+```bash
 dotnet ef database update
-5. Run project
+```
+
+---
+
+### 5. Run
+
+```bash
 dotnet run
-6. Swagger
+```
 
-Sau khi chạy:
+---
 
-https://localhost:<port>/swagger
-📌 Best Practices áp dụng
-Clean Architecture (tách biệt rõ layer)
-CQRS (tách read/write)
-Dependency Injection
-Validation riêng bằng FluentValidation
-Tách business logic khỏi controller
-Dễ test (unit test friendly)
+### 6. Swagger
+
+    https://localhost:<port>/swagger
+
+---
+
+## 🧠 Best Practices
+
+- Clean Architecture (tách layer rõ ràng)  
+- CQRS (tách read/write)  
+- Dependency Injection  
+- FluentValidation (validate riêng)  
+- Tách business logic khỏi controller  
+- Unit test friendly  
